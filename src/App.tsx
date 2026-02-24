@@ -9,6 +9,7 @@ const LoadingSpinner = () => (
         <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
         <p className="mt-4 text-slate-500 font-medium animate-pulse">Loading amazing things...</p>
     </div>
+
 );
 
 function App() {
