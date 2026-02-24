@@ -9,13 +9,10 @@ export const useTreeData = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [activeAction, setActiveAction] = useState<TreeActionType>(null);
 
-    // Stable ref to always have the latest nodes in callbacks without re-renders
     const nodesRef = useRef<ITreeNode[]>([]);
     useEffect(() => {
         nodesRef.current = nodes;
     }, [nodes]);
-
-    // Initial load
     const fetchRoot = async () => {
         try {
             const rootNodes = await mockApi.getRootNodes();
@@ -31,7 +28,6 @@ export const useTreeData = () => {
         fetchRoot();
     }, []);
 
-    // Helper to find a node in the tree
     const findNodeById = (list: ITreeNode[], id: string): ITreeNode | undefined => {
         for (const node of list) {
             if (node.id === id) return node;
@@ -44,12 +40,9 @@ export const useTreeData = () => {
     };
 
     const toggleExpand = useCallback(async (nodeId: string) => {
-        // Close any active actions when expanding/collapsing to refocus the tree interaction
         setActiveAction(null);
 
         let shouldFetch = false;
-
-        // Use the ref for the latest state to check if we need to fetch
         const targetNode = findNodeById(nodesRef.current, nodeId);
         if (targetNode && targetNode.hasChildren && !targetNode.children) {
             shouldFetch = true;
@@ -94,9 +87,8 @@ export const useTreeData = () => {
     }, []);
 
     const addNode = useCallback(async (parentId: string | null, name: string, isFolder: boolean = false) => {
-        setActiveAction(null); // Close input after submission
+        setActiveAction(null);
 
-        // Optimistic update
         const tempId = `temp-${Date.now()}`;
         const optimisticNode: ITreeNode = {
             id: tempId,
@@ -153,7 +145,7 @@ export const useTreeData = () => {
     }, []);
 
     const updateNode = useCallback(async (id: string, name: string) => {
-        setActiveAction(null); // Close input
+        setActiveAction(null);
         let originalName = '';
 
         setNodes((prevNodes) => {
@@ -188,7 +180,6 @@ export const useTreeData = () => {
         setActiveAction(null);
         let deletedNode: ITreeNode | null = null;
 
-        // Populate deletedNode from Ref before state update
         deletedNode = findNodeById(nodesRef.current, id) || null;
 
         setNodes((prevNodes) => {
@@ -205,7 +196,7 @@ export const useTreeData = () => {
             await mockApi.deleteNode(id);
         } catch (err) {
             console.error('Failed to delete node:', err);
-            if (deletedNode) fetchRoot(); // Re-fetch as a simple rollback for complex removals
+            if (deletedNode) fetchRoot();
         }
     }, []);
 

@@ -43,13 +43,13 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const mockApi = {
     async getRootNodes(): Promise<ITreeNode[]> {
-        await delay(100);
+        await delay(5000);
         return [...INITIAL_DATA];
     },
 
-    async getChildren(parentId: string): Promise<ITreeNode[]> {
-        await delay(100);
-        return [...(CHILD_DATA[parentId] || [])];
+    async getChildren(_parentId: string): Promise<ITreeNode[]> {
+        await delay(5000);
+        return [...(CHILD_DATA[_parentId] || [])];
     },
 
     async addNode(parentId: string | null, name: string, hasChildren: boolean = false): Promise<ITreeNode> {

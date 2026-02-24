@@ -15,7 +15,6 @@ import {
 } from '@dnd-kit/sortable';
 import { useTreeData } from '../../hooks/useTreeData';
 import { TreeNode } from './TreeNode';
-import { Loader2 } from 'lucide-react';
 
 export const TreeView: React.FC = () => {
     const {
@@ -61,8 +60,20 @@ export const TreeView: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="tree-container flex items-center justify-center min-h-[200px]">
-                <Loader2 className="animate-spin text-blue-500" size={48} />
+            <div className="tree-container">
+                <h1>Infinite Explorer</h1>
+                <div className="skeleton-tree">
+                    {[1, 2, 3].map(i => (
+                        <div key={i} className="skeleton-item" style={{ opacity: 1 - i * 0.2 }}>
+                            <div className="skeleton-icon" />
+                            <div className="skeleton-text" />
+                        </div>
+                    ))}
+                    <div className="loading-overlay">
+                        <div className="circular-loader large" />
+                        <span className="mt-4 text-slate-400 font-medium tracking-wide">Initializing File System...</span>
+                    </div>
+                </div>
             </div>
         );
     }

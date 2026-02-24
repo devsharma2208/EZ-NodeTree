@@ -9,8 +9,7 @@ import {
     Edit2,
     Trash2,
     Check,
-    X,
-    Loader2
+    X
 } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -140,7 +139,7 @@ export const TreeNode: React.FC<TreeNodeProps> = React.memo(({
                 )}
 
                 {node.isExpanded && node.hasChildren && !node.children && (
-                    <Loader2 className="node-icon animate-spin" size={14} />
+                    <div className="circular-loader" style={{ marginLeft: '4px' }} />
                 )}
 
                 <div className="node-actions" onClick={e => e.stopPropagation()}>
@@ -186,6 +185,12 @@ export const TreeNode: React.FC<TreeNodeProps> = React.memo(({
             {node.hasChildren && (
                 <div className={`children-container ${node.isExpanded ? 'expanded' : ''}`}>
                     <div className="children-wrapper">
+                        {node.isExpanded && !node.children && (
+                            <div className="loading-placeholder">
+                                <div className="circular-loader" />
+                                <span className="loading-text">Fetching contents...</span>
+                            </div>
+                        )}
                         {node.children && node.children.map((child: ITreeNode) => (
                             <TreeNode
                                 key={child.id}
