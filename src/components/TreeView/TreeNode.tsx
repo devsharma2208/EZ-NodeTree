@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ITreeNode } from '../../types/tree';
 import {
@@ -59,7 +60,6 @@ export const TreeNode: React.FC<TreeNodeProps> = React.memo(({
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        marginLeft: `${level * 4}px`,
     };
 
     const handleToggle = (e: React.MouseEvent) => {
@@ -120,7 +120,7 @@ export const TreeNode: React.FC<TreeNodeProps> = React.memo(({
                 </div>
 
                 {isEditing ? (
-                    <div className="inline-edit" onClick={e => e.stopPropagation()}>
+                    <div className="inline-edit flex-1 flex gap-2" onClick={e => e.stopPropagation()}>
                         <input
                             autoFocus
                             className="inline-input"
@@ -160,51 +160,47 @@ export const TreeNode: React.FC<TreeNodeProps> = React.memo(({
 
             {isAdding && (
                 <div className="children-container expanded" style={{ marginLeft: 24 }}>
-                    <div className="children-wrapper">
-                        <div className="node-content">
-                            <div style={{ width: 18 }} />
-                            {isAddingFolder ? <Folder className="node-icon" /> : <File className="node-icon" />}
-                            <input
-                                autoFocus
-                                className="inline-input"
-                                placeholder={isAddingFolder ? "New folder name..." : "New file name..."}
-                                value={newValue}
-                                onChange={(e) => setNewValue(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') handleAdd();
-                                    if (e.key === 'Escape') setActiveAction(null);
-                                }}
-                            />
-                            <button className="action-btn" onClick={handleAdd}><Check size={14} /></button>
-                            <button className="action-btn" onClick={() => setActiveAction(null)}><X size={14} /></button>
-                        </div>
+                    <div className="node-content">
+                        <div style={{ width: 18 }} />
+                        {isAddingFolder ? <Folder className="node-icon" /> : <File className="node-icon" />}
+                        <input
+                            autoFocus
+                            className="inline-input"
+                            placeholder={isAddingFolder ? "New folder name..." : "New file name..."}
+                            value={newValue}
+                            onChange={(e) => setNewValue(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') handleAdd();
+                                if (e.key === 'Escape') setActiveAction(null);
+                            }}
+                        />
+                        <button className="action-btn" onClick={handleAdd}><Check size={14} /></button>
+                        <button className="action-btn" onClick={() => setActiveAction(null)}><X size={14} /></button>
                     </div>
                 </div>
             )}
 
             {node.hasChildren && (
                 <div className={`children-container ${node.isExpanded ? 'expanded' : ''}`}>
-                    <div className="children-wrapper">
-                        {node.isExpanded && !node.children && (
-                            <div className="loading-placeholder">
-                                <div className="circular-loader" />
-                                <span className="loading-text">Fetching contents...</span>
-                            </div>
-                        )}
-                        {node.children && node.children.map((child: ITreeNode) => (
-                            <TreeNode
-                                key={child.id}
-                                node={child}
-                                onToggle={onToggle}
-                                onAdd={onAdd}
-                                onUpdate={onUpdate}
-                                onDelete={onDelete}
-                                activeAction={activeAction}
-                                setActiveAction={setActiveAction}
-                                level={level + 1}
-                            />
-                        ))}
-                    </div>
+                    {node.isExpanded && !node.children && (
+                        <div className="loading-placeholder flex items-center gap-2 p-2">
+                            <div className="circular-loader" />
+                            <span className="text-slate-500 italic text-sm">Fetching contents...</span>
+                        </div>
+                    )}
+                    {node.children && node.children.map((child: ITreeNode) => (
+                        <TreeNode
+                            key={child.id}
+                            node={child}
+                            onToggle={onToggle}
+                            onAdd={onAdd}
+                            onUpdate={onUpdate}
+                            onDelete={onDelete}
+                            activeAction={activeAction}
+                            setActiveAction={setActiveAction}
+                            level={level + 1}
+                        />
+                    ))}
                 </div>
             )}
         </div>
