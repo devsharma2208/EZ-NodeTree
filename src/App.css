@@ -6,9 +6,9 @@
 }
 
 .app-header {
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   padding: 1.5rem;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); */
   display: flex;
   justify-content: center;
   position: sticky;
@@ -34,6 +34,11 @@
   transition: all 0.2s;
   color: #64748b;
   background-color: transparent;
+}
+
+.disactive {
+  color: #ffffff;
+  background-color: #848485;
 }
 
 .nav-btn.active {

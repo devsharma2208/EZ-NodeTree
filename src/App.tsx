@@ -12,13 +12,13 @@ function App() {
             <header className="app-header">
                 <div className="nav-container">
                     <button
-                        className={`nav-btn ${currentQuestion === 1 ? 'active' : ''}`}
+                        className={`nav-btn ${currentQuestion === 1 ? 'active' : 'disactive'}`}
                         onClick={() => setCurrentQuestion(1)}
                     >
                         Question 1: Tree View
                     </button>
                     <button
-                        className={`nav-btn ${currentQuestion === 2 ? 'active' : ''}`}
+                        className={`nav-btn ${currentQuestion === 2 ? 'active' : 'disactive'}`}
                         onClick={() => setCurrentQuestion(2)}
                     >
                         Question 2: Kanban Board
