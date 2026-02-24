@@ -16,9 +16,10 @@ import {
     arrayMove,
     sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
-import { KanbanColumn } from './KanbanColumn';
-import { KanbanCard } from './KanbanCard';
 import { Card, KanbanData } from './types';
+
+const KanbanColumn = React.lazy(() => import('./KanbanColumn').then(m => ({ default: m.KanbanColumn })));
+const KanbanCard = React.lazy(() => import('./KanbanCard').then(m => ({ default: m.KanbanCard })));
 
 const initialData: KanbanData = {
     cards: {
@@ -211,24 +212,27 @@ export const KanbanBoard: React.FC = () => {
                         const column = data.columns[columnId];
                         const cards = column.cardIds.map((id) => data.cards[id]);
                         return (
-                            <KanbanColumn
-                                key={column.id}
-                                column={column}
-                                cards={cards}
-                                onAddCard={handleAddCard}
-                                onDeleteCard={handleDeleteCard}
-                                onUpdateCard={handleUpdateCard}
-                            />
+                            <React.Suspense key={column.id} fallback={<div className="flex-1 min-w-[280px] h-[200px] bg-slate-50 animate-pulse rounded-xl" />}>
+                                <KanbanColumn
+                                    column={column}
+                                    cards={cards}
+                                    onAddCard={handleAddCard}
+                                    onDeleteCard={handleDeleteCard}
+                                    onUpdateCard={handleUpdateCard}
+                                />
+                            </React.Suspense>
                         );
                     })}
                 </div>
                 <DragOverlay>
                     {activeCardId ? (
-                        <KanbanCard
-                            card={data.cards[activeCardId]}
-                            onDelete={() => { }}
-                            onUpdate={() => { }}
-                        />
+                        <React.Suspense fallback={<div className="w-[300px] h-[100px] bg-white shadow-xl rounded-xl border border-slate-200" />}>
+                            <KanbanCard
+                                card={data.cards[activeCardId]}
+                                onDelete={() => { }}
+                                onUpdate={() => { }}
+                            />
+                        </React.Suspense>
                     ) : null}
                 </DragOverlay>
             </DndContext>

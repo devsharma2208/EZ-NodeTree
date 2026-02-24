@@ -15,7 +15,7 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { useTreeData } from '../../hooks/useTreeData';
-import { TreeNode } from './TreeNode';
+const TreeNode = React.lazy(() => import('./TreeNode').then(m => ({ default: m.TreeNode })));
 
 export const TreeView: React.FC = () => {
     const {
@@ -95,18 +95,20 @@ export const TreeView: React.FC = () => {
                     strategy={verticalListSortingStrategy}
                 >
                     <div className="flex flex-col">
-                        {nodes.map((node) => (
-                            <TreeNode
-                                key={node.id}
-                                node={node}
-                                onToggle={toggleExpand}
-                                onAdd={addNode}
-                                onUpdate={updateNode}
-                                onDelete={deleteNode}
-                                activeAction={activeAction}
-                                setActiveAction={setActiveAction}
-                            />
-                        ))}
+                        <React.Suspense fallback={<div className="h-10 bg-white/5 animate-pulse rounded-lg my-1" />}>
+                            {nodes.map((node) => (
+                                <TreeNode
+                                    key={node.id}
+                                    node={node}
+                                    onToggle={toggleExpand}
+                                    onAdd={addNode}
+                                    onUpdate={updateNode}
+                                    onDelete={deleteNode}
+                                    activeAction={activeAction}
+                                    setActiveAction={setActiveAction}
+                                />
+                            ))}
+                        </React.Suspense>
                     </div>
                 </SortableContext>
             </DndContext>

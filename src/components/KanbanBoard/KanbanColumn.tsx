@@ -3,8 +3,9 @@ import React from 'react';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useDroppable } from '@dnd-kit/core';
 import { Plus } from 'lucide-react';
-import { KanbanCard } from './KanbanCard';
 import { Card, Column } from './types';
+
+const KanbanCard = React.lazy(() => import('./KanbanCard').then(m => ({ default: m.KanbanCard })));
 
 interface KanbanColumnProps {
     column: Column;
@@ -56,14 +57,16 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
 
             <div className="flex-grow overflow-y-auto flex flex-col gap-3 p-1 min-h-[100px]">
                 <SortableContext items={column.cardIds} strategy={verticalListSortingStrategy}>
-                    {cards.map((card) => (
-                        <KanbanCard
-                            key={card.id}
-                            card={card}
-                            onDelete={onDeleteCard}
-                            onUpdate={onUpdateCard}
-                        />
-                    ))}
+                    <React.Suspense fallback={<div className="h-[100px] bg-white animate-pulse rounded-xl" />}>
+                        {cards.map((card) => (
+                            <KanbanCard
+                                key={card.id}
+                                card={card}
+                                onDelete={onDeleteCard}
+                                onUpdate={onUpdateCard}
+                            />
+                        ))}
+                    </React.Suspense>
                 </SortableContext>
                 {cards.length === 0 && (
                     <div className="h-[100px] flex items-center justify-center text-[#64748b] text-sm italic bg-black/5 rounded-lg border border-dashed border-[#cbd5e1]">
