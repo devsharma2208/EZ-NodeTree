@@ -19,7 +19,6 @@ import {
 import { KanbanColumn } from './KanbanColumn';
 import { KanbanCard } from './KanbanCard';
 import { Card, KanbanData } from './types';
-import './KanbanBoard.css';
 
 const initialData: KanbanData = {
     cards: {
@@ -199,7 +198,7 @@ export const KanbanBoard: React.FC = () => {
     };
 
     return (
-        <div className="kanban-board-container">
+        <div className="p-6 w-full min-h-[calc(100vh-100px)] flex justify-center">
             <DndContext
                 sensors={sensors}
                 collisionDetection={closestCorners}
@@ -207,7 +206,7 @@ export const KanbanBoard: React.FC = () => {
                 onDragOver={handleDragOver}
                 onDragEnd={handleDragEnd}
             >
-                <div className="kanban-board">
+                <div className="flex flex-col md:flex-row gap-5 items-start w-full max-w-[1400px]">
                     {data.columnOrder.map((columnId) => {
                         const column = data.columns[columnId];
                         const cards = column.cardIds.map((id) => data.cards[id]);
